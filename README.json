@@ -1,0 +1,7 @@
+# Midea IR Climate
+
+Home Assistant climate entity for a Midea (Coolix protocol) AC, sent through a native infrared emitter entity.
+
+Supports cool and heat, temperature 17-30, fan auto/low/medium/high, and off.
+
+Install through HACS as a custom repository (category: Integration), restart Home Assistant, then add "Midea IR Climate" under Devices & services and pick your infrared emitter.

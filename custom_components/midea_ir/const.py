@@ -1,0 +1,23 @@
+DOMAIN = "midea_ir"
+
+PREFIX = 0xB2
+OFF_FRAME = (0xB2, 0x7B, 0xE0)
+
+FAN_CODES = {"auto": 0b101, "low": 0b100, "medium": 0b010, "high": 0b001}
+MODE_CODES = {"cool": 0x0, "heat": 0xC}
+TEMP_CODES = {
+    17: 0x0,
+    18: 0x1,
+    19: 0x3,
+    20: 0x2,
+    21: 0x6,
+    22: 0x7,
+    23: 0x5,
+    24: 0x4,
+    25: 0xC,
+    26: 0xD,
+    27: 0x9,
+    28: 0x8,
+    29: 0xA,
+    30: 0xB,
+}
