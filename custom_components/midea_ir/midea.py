@@ -1,8 +1,6 @@
 import base64
 import struct
 
-from infrared_protocols.commands import Command
-
 from .const import FAN_CODES, MODE_CODES, OFF_FRAME, PREFIX, TEMP_CODES
 
 
@@ -36,12 +34,6 @@ def to_zosung(timings):
     return base64.b64encode(bytes(out)).decode()
 
 
-class MideaCommand(Command):
-    def __init__(self, data) -> None:
-        super().__init__(modulation=38000)
-        self._data = tuple(data)
-        self.code = to_zosung(self.get_raw_timings())
-
-    def get_raw_timings(self) -> list[int]:
-        message = _message(self._data)
-        return message + [5250] + message
+def build_code(state):
+    message = _message(state)
+    return to_zosung(message + [5250] + message)

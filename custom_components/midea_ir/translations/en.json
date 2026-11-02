@@ -5,7 +5,7 @@
         "title": "Midea IR Climate",
         "data": {
           "name": "Name",
-          "emitter": "Infrared emitter"
+          "ieee": "Blaster IEEE address"
         }
       }
     }

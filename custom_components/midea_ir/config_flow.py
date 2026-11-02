@@ -1,6 +1,5 @@
 import voluptuous as vol
 from homeassistant.config_entries import ConfigFlow
-from homeassistant.helpers import selector
 
 from .const import DOMAIN
 
@@ -16,9 +15,7 @@ class MideaIrConfigFlow(ConfigFlow, domain=DOMAIN):
             data_schema=vol.Schema(
                 {
                     vol.Required("name", default="Midea AC"): str,
-                    vol.Required("emitter"): selector.EntitySelector(
-                        selector.EntitySelectorConfig(domain="infrared")
-                    ),
+                    vol.Required("ieee", default="b0:e8:e8:ff:fe:6f:32:71"): str,
                 }
             ),
         )

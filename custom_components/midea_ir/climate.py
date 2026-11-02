@@ -1,4 +1,3 @@
-from homeassistant.components import infrared
 from homeassistant.components.climate import (
     ClimateEntity,
     ClimateEntityFeature,
@@ -7,7 +6,7 @@ from homeassistant.components.climate import (
 from homeassistant.const import ATTR_TEMPERATURE, UnitOfTemperature
 from homeassistant.helpers.restore_state import RestoreEntity
 
-from .midea import MideaCommand, build_state
+from .midea import build_code, build_state
 
 HVAC_TO_MODE = {
     HVACMode.COOL: "cool",
@@ -37,7 +36,7 @@ class MideaIrClimate(ClimateEntity, RestoreEntity):
     )
 
     def __init__(self, entry):
-        self._emitter = entry.data["emitter"]
+        self._ieee = entry.data["ieee"]
         self._attr_unique_id = entry.entry_id
         self._attr_hvac_mode = HVACMode.OFF
         self._attr_target_temperature = 24
@@ -69,10 +68,19 @@ class MideaIrClimate(ClimateEntity, RestoreEntity):
             int(self._attr_target_temperature),
             self._attr_fan_mode,
         )
-        await infrared.async_send_command(
-            self.hass,
-            self._emitter,
-            MideaCommand(state),
+        await self.hass.services.async_call(
+            "zha",
+            "issue_zigbee_cluster_command",
+            {
+                "ieee": self._ieee,
+                "endpoint_id": 1,
+                "cluster_id": 57348,
+                "cluster_type": "in",
+                "command": 2,
+                "command_type": "server",
+                "params": {"code": build_code(state)},
+            },
+            blocking=True,
             context=self._context,
         )
         self.async_write_ha_state()
