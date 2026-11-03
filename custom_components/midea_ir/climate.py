@@ -5,6 +5,7 @@ from homeassistant.components.climate import (
 )
 from homeassistant.const import ATTR_TEMPERATURE, UnitOfTemperature
 from homeassistant.helpers.restore_state import RestoreEntity
+from homeassistant.core import Context
 
 from .midea import build_code, build_state
 
@@ -68,6 +69,7 @@ class MideaIrClimate(ClimateEntity, RestoreEntity):
             int(self._attr_target_temperature),
             self._attr_fan_mode,
         )
+        parent = self._context.id if self._context else None
         await self.hass.services.async_call(
             "zha",
             "issue_zigbee_cluster_command",
@@ -81,7 +83,7 @@ class MideaIrClimate(ClimateEntity, RestoreEntity):
                 "params": {"code": build_code(state)},
             },
             blocking=True,
-            context=self._context,
+            context=Context(parent_id=parent),
         )
         self.async_write_ha_state()
 
